@@ -1,0 +1,70 @@
+{% extends "robots/base.html" %}
+
+{% block content %}
+  <h1>All Robots</h1>
+  <div id="map"></div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Position (X, Y)</th>
+        <th>Connected User</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for robot in robots %}
+        <tr>
+          <td>{{ robot.id }}</td>
+          <td>{{ robot.name }}</td>
+          <td>({{ robot.position_x }}, {{ robot.position_y }})</td>
+          <td>{{ robot.connected_user.username|default:"None" }}</td>
+          <td>
+            <a href="{% url 'robot-detail' robot.id %}" class="btn">View Details</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Initialize the map
+      const map = L.map('map').setView([0, 0], 2); // Default center
+
+      // Add a tile layer (OpenStreetMap)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Add markers for each robot
+      const robots = [
+        {% for robot in robots %}
+          {% if robot.position_x is not None and robot.position_y is not None %}
+            {
+              name: "{{ robot.name }}",
+              position: [{{ robot.position_x }}, {{ robot.position_y }}]
+            },
+          {% endif %}
+        {% endfor %}
+      ];
+
+      if (robots.length > 0) {
+        const bounds = [];
+
+        robots.forEach(robot => {
+          const marker = L.marker(robot.position)
+            .addTo(map)
+            .bindPopup(`<b>${robot.name}</b><br>Position: ${robot.position}`);
+          bounds.push(robot.position);
+        });
+
+        map.fitBounds(bounds);
+      } else {
+        console.warn("No robots found to display on the map.");
+      }
+    });
+  </script>
+{% endblock %}

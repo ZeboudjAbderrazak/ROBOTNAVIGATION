@@ -1,0 +1,7 @@
+{% extends "robots/base.html" %}
+
+{% block content %}
+  <h1>Error</h1>
+  <p>{{ error }}</p>
+  <a href="{% url 'robot-list' %}" class="btn">Back to List</a>
+{% endblock %}

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'robots',
     'django_extensions',
+    'rest_framework.authtoken',  # Enable Token Authentication
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'robot_control_backend.urls'
@@ -136,8 +138,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for development
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Allow requests from your React app
+]
 
 # HTTPS settings (for production)
 SECURE_SSL_REDIRECT = True  # Redirect all non-HTTPS requests to HTTPS

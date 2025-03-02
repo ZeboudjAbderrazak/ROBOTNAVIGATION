@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Admin Interface
-    path('', include('robots.urls')),  # Template URLs
-    path('api/', include('robots.api_urls')),  # API URLs
+    path('admin/', admin.site.urls),
+    path('api/', include('robots.urls')),  # Include the robots app URLs
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

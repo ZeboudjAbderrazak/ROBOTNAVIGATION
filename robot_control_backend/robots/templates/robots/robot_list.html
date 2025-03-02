@@ -61,6 +61,7 @@
           bounds.push(robot.position);
         });
 
+        // Fit the map to show all markers
         map.fitBounds(bounds);
       } else {
         console.warn("No robots found to display on the map.");
